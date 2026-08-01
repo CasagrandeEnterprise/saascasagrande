@@ -26,10 +26,17 @@ function sleepSync(ms) {
 /** Prefere conexão direta (sem pooler) só para migrate/push. */
 function migrateEnv() {
   const env = { ...process.env };
-  const direct = process.env.DIRECT_URL?.trim();
+  const direct = [
+    process.env.DIRECT_URL,
+    process.env.DATABASE_URL_UNPOOLED,
+    process.env.POSTGRES_URL_NON_POOLING,
+  ]
+    .map((value) => value?.trim())
+    .find((value) => Boolean(value));
+
   if (direct) {
     console.log(
-      "[prisma-migrate-ci] Usando DIRECT_URL para migrate (evita lock no pooler Neon)."
+      "[prisma-migrate-ci] Usando conexão direta para migrate (evita lock no pooler Neon)."
     );
     env.DATABASE_URL = direct;
   } else if (
@@ -102,6 +109,51 @@ function listMigrationNames() {
     .sort();
 }
 
+/** Banco novo/vazio: as migrations locais assumem tabelas já criadas por `db push`. */
+function isFreshDatabase(combined) {
+  return (
+    combined.includes("P3018") ||
+    /relation "[^"]+" does not exist/i.test(combined) ||
+    /table "[^"]+" does not exist/i.test(combined)
+  );
+}
+
+/** Cria o schema a partir do schema.prisma e marca as migrations como aplicadas. */
+function pushAndBaseline(env) {
+  console.log(
+    "[prisma-migrate-ci] Aplicando schema completo com db push (sem data-loss)…"
+  );
+  const push = run("npx", ["prisma", "db", "push", "--skip-generate"], env);
+  if (push.status !== 0) {
+    console.error("[prisma-migrate-ci] db push falhou.");
+    return push.status;
+  }
+
+  const migrations = listMigrationNames();
+  if (migrations.length === 0) {
+    console.error("[prisma-migrate-ci] Nenhuma migration encontrada.");
+    return 1;
+  }
+
+  for (const name of migrations) {
+    console.log(`[prisma-migrate-ci] resolve --applied ${name}`);
+    const resolved = run(
+      "npx",
+      ["prisma", "migrate", "resolve", "--applied", name],
+      env
+    );
+    if (resolved.status !== 0) {
+      console.error(
+        `[prisma-migrate-ci] Falha ao marcar ${name} como aplicada.`
+      );
+      return resolved.status;
+    }
+  }
+
+  console.log("[prisma-migrate-ci] Baseline concluído.");
+  return 0;
+}
+
 function main() {
   const env = migrateEnv();
   const first = migrateDeployWithRetry(env);
@@ -120,48 +172,22 @@ function main() {
     process.exit(first.status);
   }
 
-  if (!combined.includes("P3005")) {
-    process.exit(first.status);
-  }
-
-  console.log(
-    "\n[prisma-migrate-ci] P3005: banco não vazio sem histórico. Fazendo baseline…"
-  );
-
-  const migrations = listMigrationNames();
-  if (migrations.length === 0) {
-    console.error("[prisma-migrate-ci] Nenhuma migration encontrada.");
-    process.exit(1);
-  }
-
-  for (const name of migrations) {
-    console.log(`[prisma-migrate-ci] resolve --applied ${name}`);
-    const resolved = run(
-      "npx",
-      ["prisma", "migrate", "resolve", "--applied", name],
-      env
+  if (combined.includes("P3005")) {
+    console.log(
+      "\n[prisma-migrate-ci] P3005: banco não vazio sem histórico. Fazendo baseline…"
     );
-    if (resolved.status !== 0) {
-      console.error(
-        `[prisma-migrate-ci] Falha ao marcar ${name} como aplicada.`
-      );
-      process.exit(resolved.status);
-    }
+    process.exit(pushAndBaseline(env));
   }
 
-  console.log(
-    "[prisma-migrate-ci] Sincronizando schema restante com db push (sem data-loss)…"
-  );
-  const push = run("npx", ["prisma", "db", "push", "--skip-generate"], env);
-  if (push.status !== 0) {
-    console.error(
-      "[prisma-migrate-ci] db push falhou. Verifique drift destruído no schema."
+  if (isFreshDatabase(combined)) {
+    console.log(
+      "\n[prisma-migrate-ci] Banco vazio: as migrations locais partem de um schema " +
+        "criado com db push. Criando o schema e fazendo baseline…"
     );
-    process.exit(push.status);
+    process.exit(pushAndBaseline(env));
   }
 
-  console.log("[prisma-migrate-ci] Baseline concluído.");
-  process.exit(0);
+  process.exit(first.status);
 }
 
 main();
