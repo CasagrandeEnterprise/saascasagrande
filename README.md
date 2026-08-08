@@ -59,8 +59,12 @@ npm run dev
 
 O portal faz rewrite de `/dona-lu/*` e `/allativa/*` para os apps filhos.
 
-## Isolamento
+## Deploy (Vercel)
 
-- Cada app mantém seu Prisma, CSS, componentes e Server Actions
-- Rotas não colidem graças ao `basePath`
-- Sessão única via cookie Auth.js (`path: /` + mesmo `AUTH_SECRET`)
+O projeto na Vercel deve apontar para a **raiz do monorepo**.
+
+- **Install:** `npm install`
+- **Build:** `npm run build` (compila só o portal — `apps/portal`)
+- Variáveis do portal: `AUTH_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `NEXT_PUBLIC_PORTAL_URL`, e opcionalmente `DONA_LU_ORIGIN` / `ALLATIVA_ORIGIN` (URLs dos deploys dos sistemas)
+
+Os sistemas (`dona-lu` / `allativa`) devem ser projetos Vercel separados (Root Directory `apps/dona-lu` e `apps/allativa`), cada um com seu banco e o mesmo `AUTH_SECRET` do portal.
