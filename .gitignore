@@ -1,5 +1,4 @@
-# ==================================================================
-# Doceria Dona Lu — Next.js 15 + Prisma + Vercel
+# Casagrande SaaS — monorepo
 # ==================================================================
 
 # --- Dependências ---
@@ -14,9 +13,9 @@ node_modules/
 .pnpm-store/
 
 # --- Next.js (build e cache) ---
-/.next/
-/out/
-/build/
+.next/
+out/
+build/
 next-env.d.ts
 .turbo/
 
@@ -24,8 +23,9 @@ next-env.d.ts
 .env
 .env.*
 !.env.example
+!.env*.example
 
-# --- Prisma / bancos locais (SQLite de dev) ---
+# --- Prisma / bancos locais ---
 *.db
 *.db-journal
 *.sqlite
@@ -39,30 +39,29 @@ prisma/*.db-journal
 # --- TypeScript ---
 *.tsbuildinfo
 
-# --- Logs e diagnósticos ---
+# --- Logs ---
 logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 # --- Testes / cobertura ---
 coverage/
 *.lcov
 .nyc_output/
 
-# --- Caches diversos ---
+# --- Caches ---
 .cache/
 .eslintcache
 .stylelintcache
 .npm/
 
-# --- Certificados locais (HTTPS em dev) ---
+# --- Certificados ---
 *.pem
 
-# --- Sistema operacional: Windows ---
+# --- SO: Windows ---
 Thumbs.db
 Thumbs.db:encryptable
 ehthumbs.db
@@ -73,11 +72,11 @@ $RECYCLE.BIN/
 *.stackdump
 *.lnk
 
-# --- OneDrive / arquivos temporários ---
+# --- OneDrive ---
 *.tmp
 ~$*
 
-# --- Sistema operacional: macOS / Linux ---
+# --- SO: macOS / Linux ---
 .DS_Store
 .DS_Store?
 ._*
@@ -85,7 +84,7 @@ $RECYCLE.BIN/
 .Trashes
 *~
 
-# --- Editores / IDEs ---
+# --- Editores ---
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
@@ -95,3 +94,6 @@ $RECYCLE.BIN/
 *.njsproj
 *.sln
 *.sw?
+
+# Nested app git metadata (cada app pode ter vindo de repo próprio)
+apps/*/.git/

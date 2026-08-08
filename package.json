@@ -1,0 +1,20 @@
+{
+  "name": "saascasagrande",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n portal,dona-lu,allativa -c cyan,magenta,green \"npm run dev -w @casagrande/portal\" \"npm run dev -w doceria-dona-lu\" \"npm run dev -w allativa-joias\"",
+    "dev:portal": "npm run dev -w @casagrande/portal",
+    "dev:dona-lu": "npm run dev -w doceria-dona-lu",
+    "dev:allativa": "npm run dev -w allativa-joias",
+    "build": "npm run build -w @casagrande/portal && npm run build -w doceria-dona-lu && npm run build -w allativa-joias",
+    "lint": "npm run lint -w @casagrande/portal --if-present && npm run lint -w doceria-dona-lu --if-present && npm run lint -w allativa-joias --if-present"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
