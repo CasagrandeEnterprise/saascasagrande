@@ -1,8 +1,11 @@
 /** @type {import('next').NextConfig} */
 import path from "path";
 import { fileURLToPath } from "url";
+import { loadRootEnv } from "../../packages/auth/src/load-root-env.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+loadRootEnv(__dirname);
 
 const donaLuOrigin = process.env.DONA_LU_ORIGIN || "http://localhost:3001";
 const allativaOrigin = process.env.ALLATIVA_ORIGIN || "http://localhost:3002";
