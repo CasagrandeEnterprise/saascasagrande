@@ -1,7 +1,10 @@
 import path from "path";
 import { fileURLToPath } from "url";
+import { loadRootEnv } from "../../packages/auth/src/load-root-env.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+loadRootEnv(__dirname);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
