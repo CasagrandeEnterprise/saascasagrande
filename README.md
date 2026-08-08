@@ -61,11 +61,14 @@ O portal faz rewrite de `/dona-lu/*` e `/allativa/*` para os apps filhos.
 
 ## Deploy (Vercel)
 
-### Opção recomendada
-No projeto da Vercel → **Settings → General → Root Directory** → `apps/portal`.
+### Opção recomendada (evita hacks de `.next`)
+Na Vercel → **Settings → General → Root Directory** → `apps/portal` → Save → Redeploy.
+
+Com isso o builder usa `apps/portal` diretamente (sem copiar `.next`).
 
 ### Se o Root Directory estiver na raiz (`.`)
-`npm run build` compila o portal e espelha `apps/portal/.next` → `.next` na raiz (o builder da Vercel exige `/vercel/path0/.next`).
+`npm run build` compila o portal e **copia** `apps/portal/.next` → `.next` na raiz
+(cópia real — symlink quebra o tracing do `@swc/helpers` na Vercel).
 
 Variáveis do portal: `AUTH_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `NEXT_PUBLIC_PORTAL_URL`, e opcionalmente `DONA_LU_ORIGIN` / `ALLATIVA_ORIGIN`.
 

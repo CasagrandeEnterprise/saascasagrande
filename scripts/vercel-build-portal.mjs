@@ -1,11 +1,13 @@
-import { cpSync, existsSync, rmSync, symlinkSync, mkdirSync } from "node:fs";
+import { cpSync, existsSync, rmSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { execSync } from "node:child_process";
 
 /**
- * Build do portal + espelha `.next` na raiz do monorepo.
- * Necessário quando a Vercel usa Root Directory = "." (espera `/vercel/path0/.next`).
+ * Build do portal e CÓPIA (não symlink) de apps/portal/.next → .next na raiz.
+ *
+ * A Vercel com Root Directory="." espera /vercel/path0/.next/routes-manifest.json.
+ * Symlink quebra o file tracing (resolve para /node_modules/... fora do projeto).
  */
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const portalNext = join(root, "apps", "portal", ".next");
@@ -17,20 +19,12 @@ execSync("npm run build -w @casagrande/portal", {
   env: process.env,
 });
 
-if (!existsSync(join(portalNext, "routes-manifest.json"))) {
-  console.error(
-    "Build do portal não gerou apps/portal/.next/routes-manifest.json"
-  );
+const manifest = join(portalNext, "routes-manifest.json");
+if (!existsSync(manifest)) {
+  console.error("Build do portal não gerou apps/portal/.next/routes-manifest.json");
   process.exit(1);
 }
 
 rmSync(rootNext, { recursive: true, force: true });
-
-try {
-  symlinkSync(portalNext, rootNext, "junction");
-  console.log("Linked .next -> apps/portal/.next");
-} catch {
-  mkdirSync(dirname(rootNext), { recursive: true });
-  cpSync(portalNext, rootNext, { recursive: true });
-  console.log("Copied apps/portal/.next -> .next");
-}
+cpSync(portalNext, rootNext, { recursive: true });
+console.log("Copied apps/portal/.next -> .next (no symlink)");
