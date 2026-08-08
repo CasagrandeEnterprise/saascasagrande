@@ -61,10 +61,12 @@ O portal faz rewrite de `/dona-lu/*` e `/allativa/*` para os apps filhos.
 
 ## Deploy (Vercel)
 
-O projeto na Vercel deve apontar para a **raiz do monorepo**.
+### Opção recomendada
+No projeto da Vercel → **Settings → General → Root Directory** → `apps/portal`.
 
-- **Install:** `npm install`
-- **Build:** `npm run build` (compila só o portal — `apps/portal`)
-- Variáveis do portal: `AUTH_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `NEXT_PUBLIC_PORTAL_URL`, e opcionalmente `DONA_LU_ORIGIN` / `ALLATIVA_ORIGIN` (URLs dos deploys dos sistemas)
+### Se o Root Directory estiver na raiz (`.`)
+`npm run build` compila o portal e espelha `apps/portal/.next` → `.next` na raiz (o builder da Vercel exige `/vercel/path0/.next`).
+
+Variáveis do portal: `AUTH_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `NEXT_PUBLIC_PORTAL_URL`, e opcionalmente `DONA_LU_ORIGIN` / `ALLATIVA_ORIGIN`.
 
 Os sistemas (`dona-lu` / `allativa`) devem ser projetos Vercel separados (Root Directory `apps/dona-lu` e `apps/allativa`), cada um com seu banco e o mesmo `AUTH_SECRET` do portal.
