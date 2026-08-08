@@ -49,7 +49,7 @@ type OrderForReceipt = {
 };
 
 /**
- * Normaliza valores brutos (PDV + Mercado Pago) para buckets de métrica/exibição.
+ * Normaliza valores brutos (PDV + histórico online) para buckets de métrica/exibição.
  * Retorna null para vazio — pedidos antigos sem forma de pagamento.
  */
 export function canonicalizePaymentMethod(
@@ -109,8 +109,8 @@ export function formatPaymentMethodLabel(
     case "debit_card":
       return "Cartão de Débito";
     default:
-      if (key === "account_money") return "Saldo Mercado Pago";
-      if (key === "checkout_pro") return "Mercado Pago";
+      if (key === "account_money") return "Saldo online";
+      if (key === "checkout_pro") return "Pagamento online";
       return method.trim();
   }
 }

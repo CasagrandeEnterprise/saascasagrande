@@ -17,7 +17,6 @@ export type BannerActionState = {
 
 function revalidateAll() {
   revalidatePath("/admin/banners");
-  revalidatePath("/");
 }
 
 export async function createBanner(

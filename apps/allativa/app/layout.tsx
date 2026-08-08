@@ -16,9 +16,8 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "AllAtiva Joias — Catálogo Digital",
-  description:
-    "Joalheria de alto padrão. Explore nosso catálogo de peças exclusivas e descubra a sofisticação AllAtiva.",
+  title: "Sistema de Joias — Painel",
+  description: "Painel administrativo do Sistema de Joias.",
 };
 
 export default function RootLayout({

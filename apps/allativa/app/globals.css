@@ -46,11 +46,6 @@
     @apply bg-slate-50 text-slate-900;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
-
-  /* Compensa a altura do header fixo ao rolar até as seções (scroll spy). */
-  section[id] {
-    scroll-margin-top: 5rem;
-  }
 }
 
 /* Impressão térmica 80mm — comprovante de compra + ordem de produção

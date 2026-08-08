@@ -16,7 +16,6 @@ export type ModifierActionState = {
 
 function revalidateProducts() {
   revalidatePath("/admin/produtos");
-  revalidatePath("/");
 }
 
 /**

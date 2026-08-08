@@ -15,7 +15,7 @@ const nextConfig = {
     /**
      * URLs locais com query string (ex.: /api/file?pathname=...) exigem
      * localPatterns no Next 15+. Sem isso o otimizador rejeita a imagem
-     * e o checkout/carrinho mostram o ícone quebrado.
+     * no painel admin.
      * `search` omitido = qualquer query permitida nesse pathname.
      */
     localPatterns: [

@@ -20,7 +20,6 @@ export type StockActionState = {
 function revalidateStock() {
   revalidatePath("/admin/estoque");
   revalidatePath("/admin/produtos");
-  revalidatePath("/");
 }
 
 export async function setProductStock(

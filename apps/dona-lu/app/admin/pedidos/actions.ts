@@ -75,7 +75,6 @@ function revalidateOrders() {
   revalidatePath("/admin/pedidos/historico");
   revalidatePath("/admin/estoque");
   revalidatePath("/admin");
-  revalidatePath("/");
 }
 
 export async function createOrder(
@@ -327,7 +326,7 @@ export async function reopenOrder(orderId: string): Promise<OrderActionState> {
     if (existing.status === "REQUIRES_REFUND") {
       return {
         error:
-          "Pedido pago sem estoque (REQUIRES_REFUND). Faça o estorno no Mercado Pago e cancele o pedido.",
+          "Pedido com pagamento registrado sem estoque (REQUIRES_REFUND). Cancele o pedido no painel.",
       };
     }
     if (existing.status === "PAID") {

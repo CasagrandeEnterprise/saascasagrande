@@ -16,8 +16,6 @@ export type ReviewAdminState = {
 
 function revalidateReviews() {
   revalidatePath("/admin/avaliacoes");
-  revalidatePath("/avaliacoes");
-  revalidatePath("/");
 }
 
 function normalizePhone(value: string | null | undefined): string {

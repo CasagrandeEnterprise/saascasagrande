@@ -18,8 +18,6 @@ export type SettingsActionState = {
 
 function revalidateSettings() {
   revalidatePath("/admin/configuracoes");
-  revalidatePath("/checkout");
-  revalidatePath("/");
 }
 
 export async function saveStoreSettings(

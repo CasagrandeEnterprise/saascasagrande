@@ -399,7 +399,6 @@ export async function saveFichaTecnica(
     revalidatePath("/admin/receitas-base");
     revalidatePath("/admin/produtos");
     revalidatePath("/admin");
-    revalidatePath("/");
 
     return {
       success: true,

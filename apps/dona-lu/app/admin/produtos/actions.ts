@@ -17,7 +17,6 @@ export type ProductActionState = {
 function revalidateAll() {
   revalidatePath("/admin/produtos");
   revalidatePath("/admin");
-  revalidatePath("/");
 }
 
 function parsePrice(value: FormDataEntryValue | null): number {

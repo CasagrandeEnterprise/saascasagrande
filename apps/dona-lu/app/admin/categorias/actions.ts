@@ -15,7 +15,6 @@ export type CategoryActionState = {
 function revalidateAll() {
   revalidatePath("/admin/categorias");
   revalidatePath("/admin/produtos");
-  revalidatePath("/");
 }
 
 export async function createCategory(

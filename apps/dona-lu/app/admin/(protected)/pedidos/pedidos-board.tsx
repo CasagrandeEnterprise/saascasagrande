@@ -348,8 +348,8 @@ export function PedidosBoard() {
           <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0" />
           <p>
             <strong>{requiresRefundCount}</strong> pedido(s) com pagamento
-            aprovado sem estoque (REQUIRES_REFUND). Estorne no Mercado Pago e
-            cancele o pedido no painel — não entram na cozinha.
+            aprovado sem estoque (REQUIRES_REFUND). Cancele o pedido no painel —
+            não entram na cozinha.
           </p>
         </div>
       )}

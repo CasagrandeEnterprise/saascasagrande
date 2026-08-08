@@ -56,7 +56,7 @@ model Product {
 model Banner {
   id        String    @id @default(cuid())
   imageUrl  String
-  /// Produto opcional — clique no banner leva a /produto/[id].
+  /// Produto opcional vinculado ao banner (legado da vitrine pública).
   productId String?
   product   Product?  @relation(fields: [productId], references: [id], onDelete: SetNull)
   isActive  Boolean   @default(true)
@@ -289,9 +289,9 @@ model Order {
   // Retirada / encomenda (checkout online)
   pickupTime         String? // HH:mm — horário escolhido pelo cliente
   deliveryDate       String? // YYYY-MM-DD — preenchido só em encomenda
-  // Mercado Pago Checkout Pro
+  // Pagamento online (legado)
   paymentId          String?     @unique // ID do pagamento aprovado no gateway
-  paymentProvider    String? // mercadopago
+  paymentProvider    String? // legado
   paymentMethod      String? // pix | visa | master | checkout_pro | …
   // Token opaco para o cliente voltar das back_urls / consultar status (não é secret do gateway).
   paymentAccessToken String?     @unique
@@ -366,18 +366,6 @@ model Gift {
   updatedAt        DateTime @updatedAt
 
   @@index([isActive, minPurchaseValue])
-}
-
-/// Idempotência de webhooks: cada evento do gateway é processado no máximo uma vez.
-model PaymentWebhookEvent {
-  id        String   @id // ex.: "mp:payment:123456789" ou id da notificação
-  paymentId String?
-  orderId   String?
-  createdAt DateTime @default(now())
-
-  @@index([paymentId])
-  @@index([orderId])
-  @@map("payment_webhook_events")
 }
 
 model OrderItem {

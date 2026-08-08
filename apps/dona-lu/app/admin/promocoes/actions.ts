@@ -19,8 +19,6 @@ export type PromoActionState = {
 function revalidatePromo() {
   revalidatePath("/admin/cupons");
   revalidatePath("/admin/brindes");
-  revalidatePath("/checkout");
-  revalidatePath("/");
 }
 
 function parseMoney(value: FormDataEntryValue | null): number {
